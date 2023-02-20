@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.db.Database;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,9 +14,9 @@ public class DatabaseInitService {
         Connection conn = Database.getInstance().getConnection();
         String sql = String.join("\n",
                      Files.readAllLines(Paths.get("sql/init_db.sql")));
-        //String sql = new String(Files.readAllBytes(Paths.get("sql/init_db.sql")));
         Statement stat = conn.createStatement();
         stat.executeUpdate(sql);
+
 
     }
 }

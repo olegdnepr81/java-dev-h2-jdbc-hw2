@@ -1,34 +1,50 @@
 package org.example;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 
 public class Database {
-    private static final Database INSTANCE = new Database();
+    private static Database instance;
     private Connection connection;
-    private Database() {
+
+    private String connectionUrl = "jdbc:h2:./DB";
+
+    private Database() throws SQLException {
         try {
-            String connectionUrl = "jdbc:h2:./DB";
+            Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection(connectionUrl);
-        } catch ( Exception e) {
-            e.printStackTrace();
-        }
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.out.println(ex.getMessage());
+//        } finally {
+//            if (connection !=null) connection.close();
+       }
     }
 
-    public static Database getInstance() {
-        return INSTANCE;
-    }
-
-    public Connection getConnection(){
+    public Connection getConnection() {
         return connection;
     }
-    public void close(){
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+
+    public static Database getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new Database();
+        } else if (instance.getConnection().isClosed()) {
+            instance = new Database();
         }
+        return instance;
     }
+
+
+//    public void close() {
+//        try {
+//            connection.close();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+
 }
 
 
