@@ -9,7 +9,7 @@ public class Database {
     private static Database instance;
     private Connection connection;
 
-    private String connectionUrl = "jdbc:h2:./DB";
+    private final String connectionUrl = "jdbc:h2:./DB";
 
     private Database() throws SQLException {
         try {
@@ -17,9 +17,7 @@ public class Database {
             connection = DriverManager.getConnection(connectionUrl);
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println(ex.getMessage());
-//        } finally {
-//            if (connection !=null) connection.close();
-       }
+        }
     }
 
     public Connection getConnection() {
@@ -34,17 +32,6 @@ public class Database {
         }
         return instance;
     }
-
-
-//    public void close() {
-//        try {
-//            connection.close();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-
 }
 
 
